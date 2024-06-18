@@ -59,16 +59,23 @@ namespace CRUD_application_2.Controllers
         [HttpPost]
         public ActionResult Edit(int id, User user)
         {
-            var existingUser = userlist.FirstOrDefault(u => u.Id == id);
-            if (existingUser == null)
+            if (ModelState.IsValid)
             {
-                return HttpNotFound();
-            }
-            existingUser.Name = user.Name;
-            existingUser.Email = user.Email;
-            // Add other properties as needed
+                var existingUser = userlist.FirstOrDefault(u => u.Id == id);
+                if (existingUser == null)
+                {
+                    return HttpNotFound();
+                }
+                existingUser.Name = user.Name;
+                existingUser.Email = user.Email;
+                // Assuming User model has more properties like Age, Address, etc. Update them as needed.
+                // existingUser.Age = user.Age;
+                // existingUser.Address = user.Address;
+                // Add other properties as needed
 
-            return RedirectToAction("Index");
+                return RedirectToAction("Index");
+            }
+            return View(user);
         }
 
         // GET: User/Delete/5
@@ -83,8 +90,8 @@ namespace CRUD_application_2.Controllers
         }
 
         // POST: User/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        [HttpPost, ActionName("Delete")]
+        public ActionResult DeleteConfirmed(int id)
         {
             var user = userlist.FirstOrDefault(u => u.Id == id);
             if (user == null)
@@ -95,6 +102,4 @@ namespace CRUD_application_2.Controllers
             return RedirectToAction("Index");
         }
     }
-
 }
-
